@@ -268,7 +268,34 @@ fun EditTransactionScreen(
             title = { Text("Select Category") },
             text = {
                 if (categoryUiState.categories.isEmpty()) {
-                    Text("No categories available. Please create a category first.")
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text("No categories available.")
+                        Text(
+                            text = "Would you like to create default categories?",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Button(
+                            onClick = {
+                                categoryViewModel.createDefaultCategories(
+                                    onSuccess = {
+                                        // Categories will be loaded automatically
+                                        showCategoryDialog = false
+                                    },
+                                    onError = {
+                                        errorMessage = it
+                                        showCategoryDialog = false
+                                    }
+                                )
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Create Default Categories")
+                        }
+                    }
                 } else {
                     LazyColumn(
                         modifier = Modifier.heightIn(max = 400.dp)
@@ -288,7 +315,7 @@ fun EditTransactionScreen(
             },
             confirmButton = {
                 TextButton(onClick = { showCategoryDialog = false }) {
-                    Text("Cancel")
+                    Text(if (categoryUiState.categories.isEmpty()) "Cancel" else "Close")
                 }
             }
         )

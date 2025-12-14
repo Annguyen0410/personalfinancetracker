@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -198,7 +199,34 @@ fun AddTransactionScreen(
             title = { Text("Select Category") },
             text = {
                 if (categoryUiState.categories.isEmpty()) {
-                    Text("No categories available. Please create a category first.")
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text("No categories available.")
+                        Text(
+                            text = "Would you like to create default categories?",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Button(
+                            onClick = {
+                                categoryViewModel.createDefaultCategories(
+                                    onSuccess = {
+                                        // Categories will be loaded automatically
+                                        showCategoryDialog = false
+                                    },
+                                    onError = {
+                                        errorMessage = it
+                                        showCategoryDialog = false
+                                    }
+                                )
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Create Default Categories")
+                        }
+                    }
                 } else {
                     LazyColumn(
                         modifier = Modifier.heightIn(max = 400.dp)
@@ -218,7 +246,7 @@ fun AddTransactionScreen(
             },
             confirmButton = {
                 TextButton(onClick = { showCategoryDialog = false }) {
-                    Text("Cancel")
+                    Text(if (categoryUiState.categories.isEmpty()) "Cancel" else "Close")
                 }
             }
         )

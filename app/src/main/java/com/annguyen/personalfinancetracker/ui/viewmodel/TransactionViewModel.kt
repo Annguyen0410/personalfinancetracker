@@ -47,10 +47,11 @@ class TransactionViewModel(
                 .collect { transactions ->
                     _uiState.value = _uiState.value.copy(
                         transactions = transactions,
+                        filteredTransactions = transactions, // Initialize filtered with all transactions
                         isLoading = false,
                         errorMessage = null
                     )
-                    applyFilters()
+                    applyFilters() // Apply any active filters
                 }
         }
     }

@@ -162,6 +162,52 @@ class CategoryViewModel(
         }
     }
     
+    fun createDefaultCategories(onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            
+            val defaultCategories = listOf(
+                // Income categories
+                Category(userId = userId, name = "Salary", type = TransactionType.INCOME),
+                Category(userId = userId, name = "Freelance", type = TransactionType.INCOME),
+                Category(userId = userId, name = "Investment", type = TransactionType.INCOME),
+                Category(userId = userId, name = "Gift", type = TransactionType.INCOME),
+                Category(userId = userId, name = "Other Income", type = TransactionType.INCOME),
+                // Expense categories
+                Category(userId = userId, name = "Food & Dining", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Shopping", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Transportation", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Bills & Utilities", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Entertainment", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Healthcare", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Education", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Travel", type = TransactionType.EXPENSE),
+                Category(userId = userId, name = "Other Expense", type = TransactionType.EXPENSE)
+            )
+            
+            var successCount = 0
+            var errorCount = 0
+            
+            defaultCategories.forEach { category ->
+                val result = categoryRepository.addCategory(category)
+                result.fold(
+                    onSuccess = { successCount++ },
+                    onFailure = { errorCount++ }
+                )
+            }
+            
+            _uiState.value = _uiState.value.copy(isLoading = false)
+            
+            if (errorCount == 0) {
+                onSuccess()
+            } else if (successCount > 0) {
+                onSuccess() // Partial success, still call success
+            } else {
+                onError("Failed to create default categories")
+            }
+        }
+    }
+    
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }

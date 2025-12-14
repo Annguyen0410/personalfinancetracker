@@ -127,7 +127,7 @@ fun TransactionsListScreen(
                             text = if (uiState.transactions.isEmpty()) {
                                 "No transactions yet"
                             } else {
-                                "No transactions found"
+                                "No transactions found${if (uiState.searchQuery.isNotBlank() || uiState.selectedType != null) " matching your filters" else ""}"
                             },
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -136,6 +136,13 @@ fun TransactionsListScreen(
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = "Tap the + button to add your first transaction",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        } else if (uiState.searchQuery.isNotBlank() || uiState.selectedType != null) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Try adjusting your search or filter",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
