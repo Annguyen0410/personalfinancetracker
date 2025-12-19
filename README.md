@@ -186,7 +186,7 @@ Kendrik Deleoz - Email: kendrikdeleoz@csu.fullerton.edu - CWID: 886859461
 
 ## Demo Video
 
-[Link to your YouTube demo video]
+[Final CPSC 411A Project](https://youtu.be/rPfpgsRRnuo?si=hZWHsb8MKtJ65tRn) 
 
 ## Notes
 
